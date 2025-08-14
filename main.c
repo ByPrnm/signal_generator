@@ -7,7 +7,7 @@
 const uint PIN_CH1_BASE = 6;
 const float FREQUENCY_HZ = 1000.0f;
 const float PULSE_WIDTH_US = 5.0f;
-const float DEAD_TIME_US = 5.0f;
+const float PHASE_SHIFT_US = 5.0f;
 
 // -- Deklarasi Fungsi --
 void init_pio(PIO pio, uint *sm, uint *offset, float clk_div);
@@ -64,12 +64,12 @@ void calculate_delays(float sys_clk_hz, float pio_clk_div,
     // Total periode dalam mikrodetik
     float period_us = 1e6f / FREQUENCY_HZ;
     // Durasi event D (sisa waktu) dalam mikrodetik
-    float duration_D_us = period_us - PULSE_WIDTH_US - DEAD_TIME_US - PULSE_WIDTH_US;
+    float duration_D_us = period_us - PULSE_WIDTH_US - PHASE_SHIFT_US - PULSE_WIDTH_US;
 
     // Konversi durasi (us) ke jumlah siklus PIO
     // Rumus: cycles = duration_us * (pio_freq_hz / 1e6)
     uint32_t cycles_A = (uint32_t)(PULSE_WIDTH_US * (pio_freq_hz / 1e6f));
-    uint32_t cycles_B = (uint32_t)(DEAD_TIME_US * (pio_freq_hz / 1e6f));
+    uint32_t cycles_B = (uint32_t)(PHASE_SHIFT_US * (pio_freq_hz / 1e6f));
     uint32_t cycles_C = (uint32_t)(PULSE_WIDTH_US * (pio_freq_hz / 1e6f));
     uint32_t cycles_D = (uint32_t)(duration_D_us * (pio_freq_hz / 1e6f));
 
